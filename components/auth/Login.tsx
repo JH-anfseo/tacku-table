@@ -137,7 +137,7 @@ const Login = ({ setStatus, status }: LoginProps) => {
         setPw("");
         sessionStorage.setItem("User", JSON.stringify(authService.currentUser));
         setTimeout(() => {
-          location.href = "/mainPage";
+          location.href = "/main";
         }, 2000);
       })
       .catch((err) => {

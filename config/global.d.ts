@@ -1,7 +1,7 @@
 // global.d.ts
 declare global {
-  interface RecipeProps {
-    id?: string | number;
+  interface TypeRecipe {
+    id?: string;
     uid?: string;
     animationTitle?: string;
     foodTitle?: string;
@@ -15,7 +15,27 @@ declare global {
     children?: JSX.Element | JSX.Element[];
     bookmarkCount?: string[];
   }
-
+  interface TypeShowPw {
+    showPw: boolean;
+    setShowPw: (showPw: boolean) => void;
+  }
+  interface TypeShowPwConfirm {
+    showPwConfirm: boolean;
+    setShowPwConfirm: (showPwConfirm: boolean) => void;
+  }
+  interface TypeSearchPageProps {
+    next?: () => void;
+    lastDoc?: number;
+    text?: string;
+    totalItems?: TypeRecipe[];
+    currentItems?: TypeRecipe[];
+    dataResults?: TypeRecipe[];
+    isBest?: string;
+    activeBestBtn?: () => void;
+    inactiveBestBtn?: () => void;
+    filteredFood?: string[];
+    filteredTime?: string[];
+  }
   interface targetWholeDataType {
     animationTitle: string;
     content: string;
