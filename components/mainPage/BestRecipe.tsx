@@ -36,19 +36,18 @@ const BestRecipe: NextPage = () => {
     return (
         <>
             <div className="space-y-4 flex flex-col items-center mb-7">
-                <p className="text-3xl font-extrabold">인기레시피</p>
+                <p className="text-3xl font-semibold">인기레시피</p>
                 <p className="text-lg font-medium text-slate-500">
                     타쿠의 식탁에서 HOT한 요즘유행요리
                 </p>
             </div>
             <div className="flex flex-col items-end">
-                <button
-                    onClick={sortedBest}
-                    className="text-brand100 border border-brand100 w-[86px] h-[35px] mb-4 rounded-sm hover:bg-brand100 hover:text-white transition-all duration-200"
-                >
+                <button onClick={sortedBest} className="show-more">
                     더보기
                 </button>
-                <RecipeList dataResults={dataResults} />
+                <div className="grid mx-auto md:grid-cols-2 lg:mx-0 lg:grid-cols-3 gap-x-7 gap-y-9 relative pb-24">
+                    <RecipeList dataResults={dataResults} />
+                </div>
             </div>
         </>
     );

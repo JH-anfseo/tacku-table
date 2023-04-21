@@ -13,11 +13,11 @@ const categoryTimeList = [
 const SideCookingTime = ({ onCheckedTime, filteredTime }: TypeTimeProps) => {
     return (
         <div className="flex flex-col">
-            <h4 className="mb-3 text-sm text-mono80">조리 시간</h4>
-            <div className="flex flex-col justify-center gap-y-3 ml-5">
+            <h4 className="side-cate-title md:mt-7">조리 시간</h4>
+            <div className="flex flex-col justify-center gap-y-3">
                 {categoryTimeList.map((item) => {
                     return (
-                        <div key={item.name}>
+                        <div key={item.name} className="text-mono80 text-sm">
                             <input
                                 type="checkbox"
                                 id={item.name}
@@ -32,8 +32,12 @@ const SideCookingTime = ({ onCheckedTime, filteredTime }: TypeTimeProps) => {
                                         ? true
                                         : false
                                 }
+                                className="side-checkbox"
                             />
-                            <label htmlFor={item.name} className="ml-2">
+                            <label
+                                htmlFor={item.name}
+                                className="ml-2 hover:transition-all hover:text-brand100 hover:font-medium"
+                            >
                                 {item.name}
                             </label>
                         </div>

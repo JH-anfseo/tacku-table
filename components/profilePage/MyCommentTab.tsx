@@ -12,17 +12,26 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import useGetCommunityPost from "@/hooks/useGetCommunityPost";
 import EmptyPost from "./EmptyPost";
-const MyCommentTab = ({ userInfo }: any) => {
-  const [commentPost, setCommentPost] = useState<any[]>([]);
-  const [communityList, setCommunityList] = useState<any[]>([]);
+
+interface CommentProp {
+  postId: string;
+  boardId: string;
+  comment: string;
+  writtenDate: string;
+}
+
+const MyCommentTab = ({ userInfo }: MyTabProp) => {
+  const [commentPost, setCommentPost] = useState<CommentProp[]>([]);
+  const [communityList, setCommunityList] = useState<TCommunity[]>([]);
   const { communityPost } = useGetCommunityPost();
 
   useEffect(() => {
     setCommunityList(communityPost);
-    getCommunityComment(userInfo.userId);
+    getCommunityComment(userInfo?.userId as unknown as string);
   }, [commentPost]);
 
-  const getCommunityComment = async (userId: any) => {
+  // uid 기반으로 가져오는 함수
+  const getCommunityComment = async (userId: string) => {
     const commentsRef = collection(dbService, "comments");
     const q = query(
       commentsRef,
@@ -35,6 +44,7 @@ const MyCommentTab = ({ userInfo }: any) => {
           postId: doc.id,
           boardId: doc.data().boardId,
           comment: doc.data().comment,
+          writtenDate: doc.data().writtenDate,
         };
         return mypost;
       });
@@ -43,14 +53,14 @@ const MyCommentTab = ({ userInfo }: any) => {
   };
 
   return (
-    <Tab.Panel className="pb-6">
-      {commentPost.length === 0 && <EmptyPost></EmptyPost>}
+    <Tab.Panel className="pb-6 w-full h-[80%]">
+      {commentPost?.length === 0 && <EmptyPost></EmptyPost>}
       {commentPost?.map((p) => (
-        <div key={p.postId} className="p-6">
-          <hr className="border-border mx-8 my-6 border-[1px]" />
-          <div className="pl-8 space-x-[20px] items-center flex">
-            <div className="flex flex-col">
-              <div className="text-2xl font-semibold mb-4">
+        <div key={p.postId} className="pt-6 px-1 sm:p-6">
+          <hr className="border-mono50 mx-8 mb-6 border-[1px]" />
+          <div className="pl-8 sm:space-x-[20px] space-x-4 items-center flex">
+            <div>
+              <div className="flex flex-col text-lg sm:text-[24px] font-semibold text-mono100">
                 <Link legacyBehavior href={`/community/${p.boardId}`}>
                   <a>{p.comment}</a>
                 </Link>
@@ -58,14 +68,13 @@ const MyCommentTab = ({ userInfo }: any) => {
               {communityList.map(
                 (item) =>
                   item.id === p.boardId && (
-                    <div key={item.id}>
-                      <div className="space-x-[10px] text-mono70">
-                        <span>
-                          {item.category}
-                          게시판
-                        </span>
-                      </div>
-                      <div className="text-mono70">{item.title}</div>
+                    <div key={item.id} className="flex flex-col">
+                      <span className="text-mono70 text-xs mb-2">
+                        {p.writtenDate}
+                      </span>
+                      <span className="text-mono80 sm:text-base">
+                        {item.title}
+                      </span>
                     </div>
                   )
               )}

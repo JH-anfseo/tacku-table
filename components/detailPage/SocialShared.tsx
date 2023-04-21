@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { SiFacebook, SiKakaotalk, SiTwitter } from "react-icons/si";
 import { kakaoInit } from "@/util";
 
@@ -7,12 +7,12 @@ interface socialSharedType {
 }
 function SocialShared(props: socialSharedType) {
   const shareToTwitter = () => {
+    const sharedLink = encodeURIComponent(window.location.href);
     let title = props.targetWholeData.foodTitle;
-    const sharedLink = `text=
-      ${encodeURIComponent(
-        props.targetWholeData.foodTitle + " \n "
-      )}${encodeURIComponent(location.href)}`;
-    window.open(`https://twitter.com/intent/tweet?${sharedLink}`, "popup제목");
+    window.open(
+      `https://twitter.com/intent/tweet?url=${sharedLink}&text=${title}`,
+      "popup제목"
+    );
   };
 
   const shareToFacebook = () => {
@@ -52,17 +52,26 @@ function SocialShared(props: socialSharedType) {
     kakaoInit();
   }, []);
   return (
-    <>
-      <button onClick={kakaoShare} className="w-6 h-6 mr-2">
-        <SiKakaotalk style={{ fontSize: "36px", color: "#AFAFAF" }} />
+    <div className="flex items-center justify-center">
+      <button
+        onClick={kakaoShare}
+        className="recipepage-share-button text-[#f39e31]"
+      >
+        <SiKakaotalk />
       </button>
-      <button onClick={shareToFacebook} className="w-6 h-6 mr-2">
-        <SiFacebook style={{ fontSize: "36px", color: "#AFAFAF" }} />
+      <button
+        onClick={shareToFacebook}
+        className="text-[#f39e31] recipepage-share-button"
+      >
+        <SiFacebook />
       </button>
-      <button onClick={shareToTwitter} className="w-6 h-6 mr-2">
-        <SiTwitter style={{ fontSize: "36px", color: "#AFAFAF" }} />
+      <button
+        onClick={shareToTwitter}
+        className="text-[#f39e31] recipepage-share-button"
+      >
+        <SiTwitter />
       </button>
-    </>
+    </div>
   );
 }
 

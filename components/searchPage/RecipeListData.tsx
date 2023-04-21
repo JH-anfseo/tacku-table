@@ -1,18 +1,16 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { VscEye } from "react-icons/vsc";
+import { Warn } from "../toastify/Alert";
 
 const RecipeListData = ({ item }: { item: TypeRecipe }) => {
-    // 회원아니면 alert뜨게함. 추가 로직
     const [storageCurrentUser, setStorageCurrentUser] = useState("");
     // 상세페이지이동
     const router = useRouter();
     const goToDetail = (item: TypeRecipe) => {
         item.displayStatus === "회원 공개" && storageCurrentUser === "guest"
-            ? toast.warning("멤버공개 레시피글입니다. 로그인을 진행해주세요.", {
-                  autoClose: 2000,
-              })
+            ? Warn("멤버공개 레시피글입니다. 로그인을 진행해주세요.")
             : router.push(`/detailRecipe/${item.id}`);
     };
 
@@ -26,27 +24,29 @@ const RecipeListData = ({ item }: { item: TypeRecipe }) => {
     }, [storageCurrentUser]);
 
     return (
-        <div
-            key={item.id}
-            className="w-[316px] aspect-[1/0.7] cursor-pointer"
-            onClick={() => {
-                goToDetail(item);
-            }}
-        >
-            <div className="w-[316px] h-[188px] overflow-hidden mx-auto relative">
+        <div key={item.id} className="aspect-[1/0.7]">
+            <div className="w-full aspect-[1/0.65] overflow-hidden mx-auto relative">
                 <Image
                     src={`${item.thumbnail}`}
-                    className="aspect-[1/0.7] object-cover rounded-sm"
+                    className="aspect-[1/0.65] object-cover rounded-sm w-auto h-auto cursor-pointer"
                     alt="recipe_picture"
-                    width={316}
+                    width={288}
                     height={188}
                     loader={({ src }) => src}
                     unoptimized
                     priority={true}
+                    onClick={() => {
+                        goToDetail(item);
+                    }}
                 />
                 {item.displayStatus === "회원 공개" && (
                     <>
-                        <div className="w-full h-full bg-black opacity-40 absolute top-0 left-0"></div>
+                        <div
+                            className="w-full aspect-[1/0.65] bg-black opacity-40 absolute top-0 left-0 cursor-pointer"
+                            onClick={() => {
+                                goToDetail(item);
+                            }}
+                        ></div>
                         <p className="absolute bottom-4 right-10 text-white text-sm">
                             회원전용
                         </p>
@@ -67,13 +67,25 @@ const RecipeListData = ({ item }: { item: TypeRecipe }) => {
                     </>
                 )}
             </div>
-            <ul className="text-sm text-slate-500 space-x-4 mt-1 flex">
-                <li className="text-ellipsis overflow-hidden whitespace-nowrap text-blue100">
-                    &#35;{item.animationTitle}
-                </li>
-                <li className="whitespace-nowrap">&#35;{item.cookingTime}</li>
-            </ul>
-            <p className="text-lg text-slate-900 font-semibold mt-1">
+            <div className="text-sm text-slate-500 mt-1 flex justify-between">
+                <div className="flex">
+                    <p className="text-blue100 ml-2">
+                        &#35;{item.animationTitle!.slice(0, 8)}
+                        {item.animationTitle!.length > 8 && "..."}
+                    </p>
+                    <p className="ml-4">&#35;{item.cookingTime}</p>
+                </div>
+                <p className="flex justify-center items-center gap-x-1 ml-4 mr-1">
+                    <VscEye></VscEye>
+                    {item.viewCount}
+                </p>
+            </div>
+            <p
+                className="text-lg text-slate-900 font-semibold cursor-pointer inline-block ml-2"
+                onClick={() => {
+                    goToDetail(item);
+                }}
+            >
                 {item.foodTitle}
             </p>
         </div>
